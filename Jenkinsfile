@@ -11,6 +11,16 @@ pipeline {
             steps {
                 echo "Running unit and integration tests with Mocha & Chai"
             }
+            post {
+                always {
+                    emailext (
+                        to: 'haison.au.2501@gmail.com',
+                        subject: "Jenkins Build Status: ${currentBuild.fullDisplayName}",
+                        body: "Stage result: ${currentBuild.currentResult}",
+                        attachLog: true
+                    )
+                }
+            }
         }
 
         stage('Code Analysis') {
@@ -22,6 +32,16 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo "Perform code security scanning with npm audit"
+            }
+            post {
+                always {
+                    emailext (
+                        to: 'haison.au.2501@gmail.com',
+                        subject: "Jenkins Build Status: ${currentBuild.fullDisplayName}",
+                        body: "Stage result: ${currentBuild.currentResult}",
+                        attachLog: true
+                    )
+                }
             }
         }
 
