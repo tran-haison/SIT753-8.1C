@@ -1,48 +1,46 @@
 pipeline {
     agent any
 
-    environment {
-        DIRECTORY_PATH = "/path/to/source/code"
-        TESTING_ENVIRONMENT = "Staging"
-        PRODUCTION_ENVIRONMENT = "Hai Son Tran"
-    }
-
     stages {
         stage('Build') {
             steps {
-                echo "Fetch the source code from the directory path specified by the environment variable: ${env.DIRECTORY_PATH}"
-                echo "Compile the code and generate any necessary artefacts"
+                echo "Build and run the NodeJS web application with npm"
             }
         }
 
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                echo "Unit tests"
-                echo "Integration tests"
+                echo "Running unit and integration tests with Mocha & Chai"
             }
         }
 
-        stage('Code Quality Check') {
+        stage('Code Analysis') {
             steps {
-                echo "Check the quality of the code"
+                echo "Check the quality of the code with ESLint"
             }
         }
 
-        stage('Deploy') {
+        stage('Security Scan') {
             steps {
-                echo "Deploy the application to a testing environment specified by the environment variable: ${env.TESTING_ENVIRONMENT}"
+                echo "Perform code security scanning with npm audit"
             }
         }
 
-        stage('Approval') {
+        stage('Deploy to Staging') {
             steps {
-                sleep time: 10, unit: 'SECONDS'
+                echo "Deploy Staging to Heroku [STAG]"
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo "Running integration tests on staging with Mocha & Chai"
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo "Deploying code to production environment: ${env.PRODUCTION_ENVIRONMENT}"
+                echo "Deploying production to Heroku [PROD]"
             }
         }
     }
