@@ -39,7 +39,7 @@ pipeline {
 
         stage('Deploy to Production') {
             steps {
-                echo "Deploying production to Heroku [PROD]"
+                echo "Deploy Production to Heroku [PROD]"
             }
         }
     }
