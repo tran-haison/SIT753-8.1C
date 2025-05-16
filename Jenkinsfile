@@ -12,11 +12,11 @@ pipeline {
                 echo "Running unit and integration tests with Mocha & Chai"
             }
             post {
-                success {
+                always {
                     emailext (
                         to: 'haison.au.2501@gmail.com',
-                        subject: "Jenkins Build Status: ${currentBuild.fullDisplayName}",
-                        body: "Stage result: ${currentBuild.currentResult}",
+                        subject: "Jenkins Build Stage: ${env.JOB_NAME}",
+                        body: "Stage result: ${BUILD_LOG, maxLines=100, escapeHtml=false}",
                         attachLog: true
                     )
                 }
@@ -33,16 +33,7 @@ pipeline {
             steps {
                 echo "Perform code security scanning with npm audit"
             }
-            post {
-                success {
-                    emailext (
-                        to: 'haison.au.2501@gmail.com',
-                        subject: "Jenkins Build Status: ${currentBuild.fullDisplayName}",
-                        body: "Stage result: ${currentBuild.currentResult}",
-                        attachLog: true
-                    )
-                }
-            }
+
         }
 
         stage('Deploy to Staging') {
