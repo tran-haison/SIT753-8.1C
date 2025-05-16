@@ -11,16 +11,7 @@ pipeline {
             steps {
                 echo "Running unit and integration tests with Mocha & Chai"
             }
-            post {
-                always {
-                    emailext (
-                        to: 'haison.au.2501@gmail.com',
-                        subject: "Jenkins Build Stage: ${env.JOB_NAME}",
-                        body: "Stage result: ${BUILD_LOG, maxLines=100, escapeHtml=false}",
-                        attachLog: true
-                    )
-                }
-            }
+
         }
 
         stage('Code Analysis') {
