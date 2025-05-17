@@ -1,0 +1,99 @@
+pipeline {
+    agent any
+    
+    environment {
+        EMAIL = "haison.au.2501@gmail.com"
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                echo "Build and run the NodeJS web application with npm"
+            }
+        }
+
+        stage('Unit and Integration Tests') {
+            steps {
+                echo "Running unit and integration tests with Mocha & Chai"
+            }
+            post {
+                always {
+                    script {
+                        emailext (
+                            attachLog: true,
+                            attachmentsPattern: 'logs.txt',
+                            to: "${env.EMAIL}",
+                            from: "${env.EMAIL}",
+                            replyTo: "${env.EMAIL}",
+                            mimeType: "text/html",
+                            body: "${currentBuild.result}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n\n More info at: ${env.BUILD_URL}",
+                            subject: "Unit and Integration Tests - ${currentBuild.result}: Job ${env.JOB_NAME}"
+                        )
+                    }
+                }
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                echo "Check the quality of the code with ESLint"
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                echo "Perform code security scanning with npm audit"
+            }
+            post {
+                always {
+                    script {
+                        emailext (
+                            attachLog: true,
+                            attachmentsPattern: 'logs.txt',
+                            to: "${env.EMAIL}",
+                            from: "${env.EMAIL}",
+                            replyTo: "${env.EMAIL}",
+                            mimeType: "text/html",
+                            body: "${currentBuild.result}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n\n More info at: ${env.BUILD_URL}",
+                            subject: "Security Scan - ${currentBuild.result}: Job ${env.JOB_NAME}"
+                        )
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploy Staging to Heroku [STAG]"
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo "Running integration tests on staging with Mocha & Chai"
+            }
+            post {
+                always {
+                    script {
+                        emailext (
+                            attachLog: true,
+                            attachmentsPattern: 'logs.txt',
+                            to: "${env.EMAIL}",
+                            from: "${env.EMAIL}",
+                            replyTo: "${env.EMAIL}",
+                            mimeType: "text/html",
+                            body: "${currentBuild.result}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n\n More info at: ${env.BUILD_URL}",
+                            subject: "Integration Tests on Staging - ${currentBuild.result}: Job ${env.JOB_NAME}"
+                        )
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploy Production to Heroku [PROD]"
+            }
+        }
+    }
+}
