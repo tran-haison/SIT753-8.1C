@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "Build and run the NodeJS web application with npm 123"
+                echo "Build and run the NodeJS web application with npm"
             }
         }
 
